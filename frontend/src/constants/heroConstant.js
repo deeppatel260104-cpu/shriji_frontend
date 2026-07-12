@@ -1,0 +1,28 @@
+// Get Hero Images
+export const GET_HERO_REQUEST = "GET_HERO_REQUEST";
+export const GET_HERO_SUCCESS = "GET_HERO_SUCCESS";
+export const GET_HERO_FAIL    = "GET_HERO_FAIL";
+
+// Upload Hero Image
+export const UPLOAD_HERO_REQUEST = "UPLOAD_HERO_REQUEST";
+export const UPLOAD_HERO_SUCCESS = "UPLOAD_HERO_SUCCESS";
+export const UPLOAD_HERO_FAIL    = "UPLOAD_HERO_FAIL";
+
+// Update Hero Image
+export const UPDATE_HERO_REQUEST = "UPDATE_HERO_REQUEST";
+export const UPDATE_HERO_SUCCESS = "UPDATE_HERO_SUCCESS";
+export const UPDATE_HERO_FAIL    = "UPDATE_HERO_FAIL";
+
+// Toggle Hero Status
+export const TOGGLE_HERO_REQUEST = "TOGGLE_HERO_REQUEST";
+export const TOGGLE_HERO_SUCCESS = "TOGGLE_HERO_SUCCESS";
+export const TOGGLE_HERO_FAIL    = "TOGGLE_HERO_FAIL";
+
+// Delete Hero Image
+export const DELETE_HERO_REQUEST = "DELETE_HERO_REQUEST";
+export const DELETE_HERO_SUCCESS = "DELETE_HERO_SUCCESS";
+export const DELETE_HERO_FAIL    = "DELETE_HERO_FAIL";
+
+// Clear
+export const CLEAR_ERRORS  = "CLEAR_ERRORS";
+export const CLEAR_MESSAGE = "CLEAR_MESSAGE";

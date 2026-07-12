@@ -1,0 +1,59 @@
+@import "tailwindcss";
+body {
+  @apply bg-cream text-ink font-jost;
+}
+
+@theme {
+
+  --color-cream: #ede8e0;
+  --color-cream-dark: #EDE0C4;
+  --color-ink: #1a1a1a;
+  --color-ink-light: #3a3530;
+  --color-gold: #B8955A;
+  --color-gold-light: #D4AF7A;
+  --color-teal: #4ABFBF;
+  --font-jost: 'Jost', sans-serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-playfair: 'Playfair Display', serif;
+
+
+  @keyframes letterReveal {
+    from {
+      opacity: 0;
+      transform: translateY(40px) scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+
+@layer utilities {
+  .animate-letter-reveal {
+    animation: letterReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .noise-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+  }
+}
