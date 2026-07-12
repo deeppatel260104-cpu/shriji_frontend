@@ -8,4 +8,4 @@ git commit -m "Auto backup %date% %time%"
 
 git push origin main
 
-exit
+exit  
