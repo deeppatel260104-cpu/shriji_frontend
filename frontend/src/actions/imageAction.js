@@ -26,15 +26,18 @@ export const getAllImages = () => async (dispatch) => {
 // ─── GET IMAGES BY CATEGORY ───────────────────────────────────────────────────
 export const getImagesByCategory = (categoryId) => async (dispatch) => {
     try {
-        dispatch({ type: GET_IMAGES_BY_CATEGORY_REQUEST });
+        dispatch({ type: GET_IMAGES_BY_CATEGORY_REQUEST , payload: {categoryId}});
 
         const { data } = await API.get(`/images/category/${categoryId}`);
 
-        dispatch({ type: GET_IMAGES_BY_CATEGORY_SUCCESS, payload: data.data });
+        dispatch({ 
+            type: GET_IMAGES_BY_CATEGORY_SUCCESS,
+            payload: { categoryId, images: data.data},
+        });
     } catch (error) {
         dispatch({
             type: GET_IMAGES_BY_CATEGORY_FAIL,
-            payload: error.response?.data?.message || error.message,
+            payload: {categoryId, error: error.response?.data?.message || error.message,},
         });
     }
 };
@@ -96,10 +99,14 @@ export const updateImageLayout = (id, layoutData) => async (dispatch, getState) 
             });
         }
 
-        if (Array.isArray(state.imagesReducer?.images)) {
-            dispatch({
-                type: GET_IMAGES_BY_CATEGORY_SUCCESS,
-                payload: state.imagesReducer.images.map(patchItem),
+        const imagesByCategory = state.imageReducer?.imagesByCategory;
+        if(imagesByCategory && typeof imagesByCategory === "object"){
+            Object.entries(imagesByCategory).forEach(([categoryId, list]) => {
+                if(!Array.isArray(list)) return;
+                dispatch({
+                    type: GET_IMAGES_BY_CATEGORY_SUCCESS,
+                    payload: {categoryId, images: list.map(patchItem)}
+                });
             });
         }
 

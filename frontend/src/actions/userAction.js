@@ -31,7 +31,7 @@ export const login = (email, password) => async (dispatch) => {
 // ─── LOGOUT ───────────────────────────────────────────────────────────────────
 export const logout = () => async (dispatch) => {
     try {
-        await API.post("/auth/logout", { withCredentials: true });
+        await API.post("/auth/logout");
         dispatch({ type: LOGOUT_SUCCESS });
     } catch (error) {
         dispatch({

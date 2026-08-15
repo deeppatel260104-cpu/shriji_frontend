@@ -20,25 +20,33 @@ export default function CategoryDetail() {
     const dispatch = useDispatch();
 
     const { categories, loading: catLoading } = useSelector((state) => state.categoriesReducer);
-    const { images, loading: imgLoading } = useSelector((state) => state.imagesReducer);
     const { videos, loading: vidLoading } = useSelector((state) => state.videosByCategoryReducer);
 
     const [activeTab, setActiveTab] = useState("photos");
     const detailRef = useRef(null);
 
     const cat = (categories || []).find((c) => c.slug === slug);
+    const categoryId = cat?.id;
+    const images = useSelector(
+        (state) => state.imagesReducer.imagesByCategory[categoryId] || []
+    );
+    const imgLoading = useSelector(
+        (state) => Boolean(state.imagesReducer.loadingByCategory[categoryId])
+    )
     const hasVideos = (videos || []).length > 0;
 
     useEffect(() => {
-        dispatch(getAllCategories());
-    }, [dispatch]);
+        if (!categories.length) {
+            dispatch(getAllCategories());
+        }
+    }, [dispatch, categories.length]);
 
     useEffect(() => {
-        if (cat?.id) {
-            dispatch(getImagesByCategory(cat.id));
-            dispatch(getVideosByCategory(cat.id));
+        if (categoryId) {
+            dispatch(getImagesByCategory(categoryId));
+            dispatch(getVideosByCategory(categoryId));
         }
-    }, [dispatch, cat?.id]);
+    }, [dispatch, categoryId]);
 
     useEffect(() => {
         if (detailRef.current) {
@@ -47,7 +55,7 @@ export default function CategoryDetail() {
     }, [slug]);
 
     // ── Loading state ──
-    if (catLoading) {
+    if (catLoading && !categories.length) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="w-10 h-10 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin" />
@@ -56,7 +64,7 @@ export default function CategoryDetail() {
     }
 
     // ── Category not found ──
-    if (!cat) {
+    if (!catLoading && !cat) {
         return (
             <div className=" min-h-screen flex flex-col items-center justify-center gap-4">
                 <p className="text-gray-500 text-lg">Category not found</p>
@@ -66,6 +74,14 @@ export default function CategoryDetail() {
                 >
                     Go Home
                 </button>
+            </div>
+        );
+    }
+
+    if(!cat) {
+        return(
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="w-10 h-10 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin" />
             </div>
         );
     }
@@ -105,7 +121,7 @@ export default function CategoryDetail() {
                 {activeTab === "photos" && (
                     <CategoryPhotoGrid
                         images={images || []}
-                        loading={imgLoading}
+                        loading={imgLoading && !images.length}
                         pinterestLink={cat.pinterest_link}
                     />
                 )}
@@ -119,7 +135,7 @@ export default function CategoryDetail() {
                     />
                 )}
 
-            </section>  
+            </section>
             <ImageText />
 
             <Footer />

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCategories } from "../../actions/categoryAction";
 import { getImagesByCategory } from "../../actions/imageAction";
 import { Link } from "react-router-dom";
 
@@ -8,37 +7,36 @@ const PreWeddingStory = ({ categorySlug }) => {
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(null);
   const isMobile = useIsMobile();
-  const { categories, loading: catLoading } = useSelector((state) => state.categoriesReducer);
-  const { images, loading: imgLoading } = useSelector((state) => state.imagesReducer);
+  const {categories} = useSelector((state) => state.categoriesReducer);
   const category = (categories || []).find((c) => c.slug === categorySlug);
-  useEffect(() => {
-    dispatch(getAllCategories());
-  }, [dispatch]);
+  
+  const categoryId = category?.id;
+  const images = useSelector(
+    (state) => state.imagesReducer.imagesByCategory[categoryId] || []
+  );
+  const  imgLoding = useSelector(
+    (state) => Boolen(state.imagesReducer.loadingByCategory[categoryId])
+  )
 
-
   useEffect(() => {
-    if (category?.id) {
-      dispatch(getImagesByCategory(category.id));
+    if (categoryId) {
+      dispatch(getImagesByCategory(categoryId));
     }
-  }, [dispatch, category?.id]);
-  // ✅ Filter images by category
-  const filteredImages = useMemo(() => (
-    (images || []).filter((img) => img.category_id === category?.id)
-  ), [images, category?.id]);
+  }, [dispatch, categoryId]);
 
   const storyImages = useMemo(() => {
     const field = isMobile ? "show_in_mobile_slideshow" : "show_in_slideshow";
-    return filteredImages.filter((img) => (
+    return (images || []).filter((img) => (
       img[field] === true ||
       img[field] === 1 ||
       img[field] === "1"
     ));
-  }, [filteredImages, isMobile]);
+  }, [images, isMobile]);
 
   // ✅ Reset when category changes
   useEffect(() => {
     setSelectedImage(null);
-  }, [category?.id, isMobile]);
+  }, [categoryId, isMobile]);
 
   // ✅ Select random image properly
   useEffect(() => {
@@ -48,12 +46,16 @@ const PreWeddingStory = ({ categorySlug }) => {
     }
   }, [storyImages]);
 
-  if (!selectedImage) {
+  if (imgLoding && !selectedImage) {
     return (
-      <section className="relative w-full h-screen flex items-center justify-center bg-[#2c2420]">
-        <div className="text-[#f7f3ee]/60 font-jost">Loading...</div>
+      <section className="relative w-full h-40 flex items-center justify-center bg-[#2c2420]">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin"/>
       </section>
     );
+  }
+
+  if(!selectedImage || !category) {
+    return null;
   }
 
   return (
@@ -69,7 +71,7 @@ const PreWeddingStory = ({ categorySlug }) => {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url(${selectedImage.image_desktop})`,
-            backgroundAttachment: "fixed",
+            backgroundAttachment: isMobile? "scroll" : "fixed",
           }}
         />
 

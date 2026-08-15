@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import Dashboard from "../pages/backend/Sidebar";
 import { loadUser } from "../actions/userAction";
@@ -24,9 +24,9 @@ import CategoryDetailPage from "../pages/frontend/CategoryDetailPage";
 import AboutUsPage from "../pages/frontend/AboutUsPage";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading, authChecked } = useSelector((state) => state.auth);
 
-  if (loading) return <Loading />;
+  if (loading || !authChecked) return <Loading />;
 
   return isAuthenticated ? children : <Navigate to="/admin/login" />;
 };
@@ -34,31 +34,16 @@ const ProtectedRoute = ({ children }) => {
 function AppContent() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { loading } = useSelector((state) => state.auth);
-  const [pageLoading, setPageLoading] = useState(true);
-  const [authCheckStarted, setAuthCheckStarted] = useState(false);
+
+  const isAdminRoute =
+    location.pathname.startsWith("/admin") &&
+    location.pathname !== "/admin/login";
 
   useEffect(() => {
-    setAuthCheckStarted(true);
-    dispatch(loadUser());
-  }, [dispatch]);
-
-  useEffect(() => {
-    setPageLoading(true);
-
-    const timer = window.setTimeout(() => {
-      setPageLoading(false);
-    }, 900);
-
-    return () => window.clearTimeout(timer);
-  }, [location.pathname]);
-
-  const isLoginRoute = location.pathname === "/admin/login";
-  const showAppLoader = pageLoading || (!isLoginRoute && authCheckStarted && loading);
-
-  if (showAppLoader) {
-    return <Loading />;
-  }
+    if(isAdminRoute) {
+      dispatch(loadUser());
+    }
+  }, [dispatch, isAdminRoute]);
 
   return (
     <Routes>
@@ -95,12 +80,6 @@ function AppContent() {
           <Route path="packages" element={<PackageAdmin />} />
           <Route path="package-addons" element={<AddOnPackage />} />
           <Route path="package-faqs" element={<PackageFaq />} />
-
-
-      {/* Redirect root → /admin/dashboard */}
-
-      {/* 404 fallback */}
-      {/* <Route path="*" element={<Navigate to="/admin/dashboard" replace />} /> */}
 
       </Route>
     </Routes>

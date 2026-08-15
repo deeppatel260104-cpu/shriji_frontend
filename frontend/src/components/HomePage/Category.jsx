@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAllCategories } from "./../../actions/categoryAction";
 
 export default function Category() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { categories, loading } = useSelector((state) => state.categoriesReducer);
   const sortedCategories = [...(categories || [])]
@@ -13,11 +10,7 @@ export default function Category() {
   .sort((a, b) => a.order_index - b.order_index); 
   const extraDesktopRows = Math.ceil(Math.max(sortedCategories.length - 8, 0) / 4);
 
-  useEffect(() => {
-    dispatch(getAllCategories());
-  }, [dispatch]);
-
-  if (loading) {
+  if (loading && !categories.length) {
     return (
       <section className="bg-[#ede8e0] px-4 sm:px-8 lg:px-10 py-16 sm:py-20 flex items-center justify-center min-h-[400px]">
         <div className="w-10 h-10 border-2 border-[#B8935A]/30 border-t-[#B8935A] rounded-full animate-spin" />

@@ -13,8 +13,8 @@ import {
 
 // ─── ALL IMAGES REDUCER ───────────────────────────────────────────────────────
 const initialAllImagesState = {
-    loading: false,
-    images: [],
+    loadingByCategory: {},
+    imagesByCategory: {},
     error: null,
 };
 

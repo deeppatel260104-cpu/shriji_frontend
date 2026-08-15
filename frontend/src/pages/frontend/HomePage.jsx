@@ -9,10 +9,18 @@ import Navbar from './../../components/Navbar/Navbar';
 import SocialFloat from '../../components/HomePage/SocialFloat';
 import Footer from './../../components/Footer/Footer';
 import ImageText from './../../components/helper/ImageText';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { getAllCategories } from '../../actions/categoryAction';
 
 
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch])
   return (
     <>
       <SocialFloat />

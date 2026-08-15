@@ -10,6 +10,7 @@ import {
 // ─── AUTH REDUCER (login / logout / loadUser) ─────────────────────────────────
 const initialAuthState = {
     loading    : false,
+    authChecked: false,
     isAuthenticated: false,
     user       : null,
     error      : null,
@@ -18,10 +19,11 @@ const initialAuthState = {
 export const authReducer = (state = initialAuthState, action) => {
     switch (action.type) {
 
-        // ── Pending ──────────────────────────────────────────────────────────
         case LOGIN_REQUEST:
-        case LOAD_USER_REQUEST:
             return { ...state, loading: true, isAuthenticated: false };
+
+        case LOAD_USER_REQUEST:
+            return { ...state, loading:true};
 
         // ── Success ──────────────────────────────────────────────────────────
         case LOGIN_SUCCESS:
@@ -29,6 +31,7 @@ export const authReducer = (state = initialAuthState, action) => {
             return {
                 ...state,
                 loading        : false,
+                authChecked: true,
                 isAuthenticated: true,
                 user           : action.payload,
                 error          : null,
@@ -39,6 +42,7 @@ export const authReducer = (state = initialAuthState, action) => {
             return {
                 ...state,
                 loading        : false,
+                authChecked: true,
                 isAuthenticated: false,
                 user           : null,
                 error          : null,
@@ -50,6 +54,7 @@ export const authReducer = (state = initialAuthState, action) => {
             return {
                 ...state,
                 loading        : false,
+                authChecked: true,
                 isAuthenticated: false,
                 user           : null,
                 error          : action.payload,
