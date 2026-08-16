@@ -14,8 +14,10 @@ export const getAllCategories = () => async (dispatch) => {
         dispatch({ type: GET_CATEGORIES_REQUEST });
 
         const { data } = await API.get("/categories/");
-
-        dispatch({ type: GET_CATEGORIES_SUCCESS, payload: data.data });
+        console.log("datacat", data);
+        dispatch({ type: GET_CATEGORIES_SUCCESS, 
+            payload: Array.isArray(data?.data) ? data.data : []
+         });
     } catch (error) {
         dispatch({
             type: GET_CATEGORIES_FAIL,

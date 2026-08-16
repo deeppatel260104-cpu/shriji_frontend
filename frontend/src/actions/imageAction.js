@@ -26,15 +26,29 @@ export const getAllImages = () => async (dispatch) => {
 // ─── GET IMAGES BY CATEGORY ───────────────────────────────────────────────────
 export const getImagesByCategory = (categoryId) => async (dispatch) => {
     try {
-        dispatch({ type: GET_IMAGES_BY_CATEGORY_REQUEST , payload: {categoryId}});
+       dispatch({ type: GET_IMAGES_BY_CATEGORY_REQUEST, payload: { categoryId } });
+       const { data } = await API.get(`/images/category/${categoryId}`);
+       const images = Array.isArray(data?.data) ? data.data : []
+       console.log("[images API]",
+         images
+       );
+       dispatch({
+           type: GET_IMAGES_BY_CATEGORY_SUCCESS,
+           payload: {
+               categoryId,
+               images
+           },
+       });
 
-        const { data } = await API.get(`/images/category/${categoryId}`);
 
-        dispatch({ 
-            type: GET_IMAGES_BY_CATEGORY_SUCCESS,
-            payload: { categoryId, images: data.data},
-        });
+
     } catch (error) {
+                   console.log("[images API FAIL]", categoryId, error.message);
+
+
+
+
+
         dispatch({
             type: GET_IMAGES_BY_CATEGORY_FAIL,
             payload: {categoryId, error: error.response?.data?.message || error.message,},

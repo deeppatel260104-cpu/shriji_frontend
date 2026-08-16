@@ -1,5 +1,9 @@
 // components/Category/CategoryVideoGrid.jsx
-
+function toYouTubeEmbed(url) {
+    if(!url) return "";
+    const match = String(url).match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+    return match ? `http://www.youtube.com/embed/${match[1]}` : url;
+}
 export default function CategoryVideoGrid({ videos = [], loading = false, catName = "" }) {
     if (loading) {
         return (
@@ -27,7 +31,7 @@ export default function CategoryVideoGrid({ videos = [], loading = false, catNam
                         {video ? (
                             <iframe
                                 className="w-full h-full"
-                                src={video.youtube_url}
+                                src={toYouTubeEmbed(video.youtube_url)}
                                 title={video.title || `${catName} video ${i + 1}`}
                                 frameBorder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState, useEffect } from "react";
 
-export default function HeroCategory({ images, catName,  }) {
+export default function HeroCategory({ images, catName, }) {
     const [current, setCurrent] = useState(0);
     const isMobile = useIsMobile();
 
@@ -41,25 +41,28 @@ export default function HeroCategory({ images, catName,  }) {
     if (!shuffledImages.length) return null;
 
     const total = shuffledImages.length;
-
+    const visibleIndexes = total <= 1 ? [0] : [current, (current + 1) % total];
     return (
         <div className="relative w-full overflow-hidden mt-14 md:mt-16"
             style={{ height: "100svh" }}
         >
             {/* ── Slides ── */}
-            {shuffledImages.map((img, i) => (
-                <div
-                    key={i}
-                    className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-                    style={{ opacity: i === current ? 1 : 0 }}
-                >
-                    <img
-                        src={img.image_desktop}
-                        alt={catName}
-                        className="w-full h-full object-cover object-center"
-                    />
-                </div>
-            ))}
+            {visibleIndexes.map((i) => {
+                const img = shuffledImages[i];
+                return (
+                    <div
+                        key={`${img.id || i} - ${i}`}
+                        className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+                        style={{ opacity: i === current ? 1 : 0 }}
+                    >
+                        <img
+                            src={img.image_desktop}
+                            alt={catName}
+                            className="w-full h-full object-cover object-center"
+                        />
+                    </div>
+                );
+            })}
 
             {/* ── Dark overlay ── */}
             <div className="absolute inset-0 bg-black/50 z-10" />

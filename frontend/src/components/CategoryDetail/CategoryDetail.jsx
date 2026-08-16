@@ -28,10 +28,11 @@ export default function CategoryDetail() {
     const cat = (categories || []).find((c) => c.slug === slug);
     const categoryId = cat?.id;
     const images = useSelector(
-        (state) => state.imagesReducer.imagesByCategory[categoryId] || []
+        (state) => state.imagesReducer?.imagesByCategory?.[categoryId] || []
     );
+    console.log("images", images)
     const imgLoading = useSelector(
-        (state) => Boolean(state.imagesReducer.loadingByCategory[categoryId])
+        (state) => Boolean(state.imagesReducer?.loadingByCategory?.[categoryId])
     )
     const hasVideos = (videos || []).length > 0;
 

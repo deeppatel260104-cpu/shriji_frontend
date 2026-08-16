@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { submitContactForm } from '../../actions/contactActions';
-import { CLEAR_ERRORS, CLEAR_MESSAGE } from '../../constants/heroConstant';
-import { CONTACT_RESET } from '../../constants/contactConstants';
+import { CONTACT_RESET, CLEAR_ERRORS, CLEAR_MESSAGE } from '../../constants/contactConstants';
 
 const COUNTRY_OPTIONS = [
   { code: "+91", flag: "🇮🇳", label: "IN" },

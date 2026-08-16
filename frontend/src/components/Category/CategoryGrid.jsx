@@ -13,15 +13,17 @@ export default function CategoryGrid() {
     const { categories, loading } = useSelector((state) => state.categoriesReducer);
 
     useEffect(() => {
-        dispatch(getAllCategories());
-    }, [dispatch]);
+        if(!categories.length){
+            dispatch(getAllCategories());
+        }
+    }, [dispatch, categories.length]);
 
     // order_index 0 = disabled, filter + sort
     const sortedCategories = [...(categories || [])]
         .filter((cat) => cat.order_index !== 0)
         .sort((a, b) => a.order_index - b.order_index);
 
-    if (loading) {
+    if (loading && !categories.length) {
         return (
             <div className="flex justify-center py-20">
                 <div className="w-10 h-10 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin" />

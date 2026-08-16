@@ -7,15 +7,16 @@ const PreWeddingStory = ({ categorySlug }) => {
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(null);
   const isMobile = useIsMobile();
+
   const {categories} = useSelector((state) => state.categoriesReducer);
   const category = (categories || []).find((c) => c.slug === categorySlug);
-  
+  console.log("categories", categories)
   const categoryId = category?.id;
   const images = useSelector(
-    (state) => state.imagesReducer.imagesByCategory[categoryId] || []
+    (state) => state.imagesReducer?.imagesByCategory?.[categoryId] || []
   );
   const  imgLoding = useSelector(
-    (state) => Boolen(state.imagesReducer.loadingByCategory[categoryId])
+    (state) => Boolean(state.imagesReducer?.loadingByCategory?.[categoryId])
   )
 
   useEffect(() => {

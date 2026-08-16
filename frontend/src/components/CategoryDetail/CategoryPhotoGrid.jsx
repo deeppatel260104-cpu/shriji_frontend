@@ -65,6 +65,8 @@ export default function CategoryPhotoGrid({ images = [], loading = false, pinter
                             <img
                                 src={row.images[0].image_desktop}
                                 alt={row.images[0].title || `Photo ${ri + 1}`}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                             />
                         </div>
@@ -76,6 +78,8 @@ export default function CategoryPhotoGrid({ images = [], loading = false, pinter
                             <img
                                 src={img.image_desktop}
                                 alt={img.title || `Photo ${ri}-${ii}`}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                             />
                         </div>

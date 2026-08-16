@@ -13,50 +13,94 @@ import {
 
 // ─── ALL IMAGES REDUCER ───────────────────────────────────────────────────────
 const initialAllImagesState = {
-    loadingByCategory: {},
-    imagesByCategory: {},
-    error: null,
+   loading: false,
+   images: [],
+   error: null,
 };
+
 
 export const allImagesReducer = (state = initialAllImagesState, action) => {
-    switch (action.type) {
+   switch (action.type) {
 
-        case GET_ALL_IMAGES_REQUEST:
-            return { ...state, loading: true };
 
-        case GET_ALL_IMAGES_SUCCESS:
-            return { ...state, loading: false, images: action.payload, error: null };
+       case GET_ALL_IMAGES_REQUEST:
+           return { ...state, loading: true };
 
-        case GET_ALL_IMAGES_FAIL:
-            return { ...state, loading: false, error: action.payload };
 
-        case CLEAR_ERRORS:
-            return { ...state, error: null };
+       case GET_ALL_IMAGES_SUCCESS:
+           return { ...state, loading: false, images: action.payload, error: null };
 
-        default:
-            return state;
-    }
+
+       case GET_ALL_IMAGES_FAIL:
+           return { ...state, loading: false, error: action.payload };
+
+
+       case CLEAR_ERRORS:
+           return { ...state, error: null };
+
+
+       default:
+           return state;
+   }
 };
+
 
 // ─── IMAGES LIST REDUCER (getByCategory) ──────────────────────────────────────
 const initialImagesState = {
-    loading: false,
-    images: [],
+    loadingByCategory: {},
+    imagesByCategory: {},
     error: null,
 };
 
 export const imagesReducer = (state = initialImagesState, action) => {
     switch (action.type) {
 
-        case GET_IMAGES_BY_CATEGORY_REQUEST:
-            return { ...state, loading: true };
+       case GET_ALL_IMAGES_REQUEST: {
+            const categoryId = action.payload?.categoryId;
+            console.log("reqredcat", categoryId)
 
-        case GET_IMAGES_BY_CATEGORY_SUCCESS:
-            return { ...state, loading: false, images: action.payload, error: null };
+            return {
+                ...state,
+                loadingByCategory: {
+                    ...state.loadingByCategory,
+                    [categoryId]: true,
+                }
+            }
+        }
 
-        case GET_IMAGES_BY_CATEGORY_FAIL:
-            return { ...state, loading: false, error: action.payload };
+        case GET_IMAGES_BY_CATEGORY_SUCCESS: {
+  const categoryId = action.payload?.categoryId;
+  console.log("REDUCER SUCCESS", categoryId, action.payload?.images?.length);
+  return {
+    ...state,
+    loadingByCategory: {
+      ...state.loadingByCategory,
+      [categoryId]: false,
+    },
+    imagesByCategory: {
+      ...(state.imagesByCategory || {}),
+      [categoryId]: action.payload?.images || [],
+    },
+    error: null,
+  };
+}
 
+
+
+
+
+        case GET_ALL_IMAGES_FAIL: {
+            const categoryId = action.payload?.categoryId;
+            return {
+                ...state,
+                loadingByCategory: {
+                    ...state.loadingByCategory,
+                    [categoryId]: false,
+                },
+                error: action.payload?.error || action.payload, 
+            }
+
+        }
         case CLEAR_ERRORS:
             return { ...state, error: null };
 
