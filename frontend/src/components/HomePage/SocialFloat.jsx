@@ -12,7 +12,7 @@ const socials = [
 
   {
     name: "Instagram",
-    url: "https://www.instagram.com/shriji_click",
+    url: "https://www.instagram.com/shriji_click09",
     bg: "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)",
     icon: (
       <svg viewBox="0 0 24 24" fill="white" width="18" height="18">
